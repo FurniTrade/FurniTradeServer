@@ -1,17 +1,25 @@
 const express = require('express');
+const cors = require("cors");
+const authRoutes = require('./Controllers/authentication.controllers');
+const mysql = require('mysql');
+const config = require('./Config/config');
+
 const app = express();
 const port = 4000;
-const authRoutes = require('./Controllers/AuthenticationController');
-const mysql = require('mysql');
-require('dotenv').config()
 
+let corsOptions = {
+  origin: "http://localhost:3000"
+};
+
+app.use(cors(corsOptions));
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: 'FurniTradeDB'
+  host: config.HOST,
+  user: config.USER,
+  password: config.PASSWORD,
+  database: config.DB
 });
+
 connection.connect((err) => {
   if (err) throw err;
   console.log('Connected!');
